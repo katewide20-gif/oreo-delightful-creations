@@ -16,8 +16,12 @@
     --plum:#3A2530;
     --plum-soft:#6b525a;
     --gold:#D4A24C;
+    --shadow-soft:0 2px 6px rgba(58,37,48,0.06), 0 10px 24px rgba(58,37,48,0.07);
+    --shadow-lift:0 6px 14px rgba(58,37,48,0.10), 0 22px 40px rgba(142,17,70,0.14);
+    --shadow-deep:0 14px 28px rgba(58,37,48,0.16), 0 30px 60px rgba(142,17,70,0.18);
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
   body{
     font-family:'Work Sans', sans-serif;
     color:var(--plum);
@@ -37,10 +41,15 @@
     background:rgba(255,252,249,0.92);
     backdrop-filter:blur(6px);
     border-bottom:1px solid rgba(58,37,48,0.08);
+    transition:box-shadow 0.3s ease, background 0.3s ease;
+  }
+  nav.scrolled{
+    background:rgba(255,252,249,0.98);
+    box-shadow:0 8px 24px rgba(58,37,48,0.10);
   }
   nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:14px 24px;}
   .brandmark{display:flex; align-items:center; gap:10px;}
-  .brandmark span{font-family:'Playfair Display', serif; font-style:italic; font-weight:700; font-size:1.5rem; color:var(--magenta); letter-spacing:0.2px;}
+  .nav-logo{height:40px; width:auto; display:block;}
   .navlinks{display:none; gap:28px; font-size:0.95rem; font-weight:500;}
   @media(min-width:860px){.navlinks{display:flex;}}
   .nav-wa{
@@ -60,7 +69,24 @@
     text-align:center;
   }
   .hero .wrap{position:relative; z-index:2;}
-  .cake-mark{width:86px; margin:0 auto 22px;}
+  .float-shape{
+    position:absolute; border-radius:50%; filter:blur(2px);
+    animation:drift 7s ease-in-out infinite;
+    z-index:1; pointer-events:none;
+  }
+  .float-shape.s1{width:70px; height:70px; background:rgba(194,24,91,0.10); top:12%; left:8%; animation-delay:0s;}
+  .float-shape.s2{width:46px; height:46px; background:rgba(21,152,149,0.14); top:66%; left:12%; animation-delay:1.4s;}
+  .float-shape.s3{width:54px; height:54px; background:rgba(212,162,74,0.16); top:20%; right:9%; animation-delay:0.7s;}
+  .float-shape.s4{width:34px; height:34px; background:rgba(194,24,91,0.14); top:70%; right:14%; animation-delay:2.1s;}
+  @keyframes drift{
+    0%,100%{transform:translateY(0) translateX(0);}
+    50%{transform:translateY(-18px) translateX(6px);}
+  }
+  .hero-logo{width:220px; max-width:70%; margin:0 auto 18px; display:block; height:auto; animation:bob 5s ease-in-out infinite;}
+  @keyframes bob{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+  }
   .hero h1{
     font-size:clamp(2.1rem, 6vw, 3.4rem);
     color:var(--magenta-deep);
@@ -75,9 +101,12 @@
   .btn{
     padding:13px 26px; border-radius:100px; font-weight:600; font-size:0.95rem;
     display:inline-flex; align-items:center; gap:8px; border:2px solid transparent;
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .btn-primary{background:var(--magenta); color:#fff;}
+  .btn-primary{background:var(--magenta); color:#fff; box-shadow:var(--shadow-lift);}
+  .btn-primary:hover{transform:translateY(-3px); box-shadow:var(--shadow-deep);}
   .btn-outline{border-color:var(--magenta-deep); color:var(--magenta-deep);}
+  .btn-outline:hover{transform:translateY(-3px); box-shadow:var(--shadow-soft);}
 
   /* swirl divider - the recurring signature motif from the logo */
   .swirl-divider{width:100%; height:46px; margin-top:-2px;}
@@ -103,8 +132,11 @@
   }
   .card{
     background:var(--cream); border-radius:18px; overflow:hidden;
-    box-shadow:0 1px 2px rgba(58,37,48,0.06);
+    box-shadow:var(--shadow-soft);
+    transform-style:preserve-3d; will-change:transform;
+    transition:transform 0.15s ease-out, box-shadow 0.3s ease;
   }
+  .card.tilt:hover{box-shadow:var(--shadow-lift);}
   .card-photo{
     aspect-ratio:4/3; position:relative;
     display:flex; align-items:center; justify-content:center;
@@ -126,7 +158,12 @@
   .snack-line-head p{color:var(--plum-soft); margin-top:8px; font-size:0.92rem;}
   .snack-grid{display:grid; gap:20px; grid-template-columns:repeat(2,1fr);}
   @media(min-width:700px){.snack-grid{grid-template-columns:repeat(4,1fr);}}
-  .snack-card{background:var(--cream); border-radius:16px; overflow:hidden; box-shadow:0 1px 2px rgba(58,37,48,0.06);}
+  .snack-card{
+    background:var(--cream); border-radius:16px; overflow:hidden; box-shadow:var(--shadow-soft);
+    transform-style:preserve-3d; will-change:transform;
+    transition:transform 0.15s ease-out, box-shadow 0.3s ease;
+  }
+  .snack-card.tilt:hover{box-shadow:var(--shadow-lift);}
   .snack-photo{aspect-ratio:1/1; overflow:hidden;}
   .snack-photo img{width:100%; height:100%; object-fit:cover;}
   .snack-card h4{padding:12px 14px 4px; font-size:0.98rem; font-family:'Playfair Display', serif; font-weight:600;}
@@ -140,8 +177,13 @@
     background:linear-gradient(160deg, var(--blush), #fff);
     display:flex; align-items:center; justify-content:center;
     border:1px solid rgba(194,24,91,0.12);
+    box-shadow:var(--shadow-soft);
+    transform-style:preserve-3d; will-change:transform;
+    transition:transform 0.15s ease-out, box-shadow 0.3s ease;
   }
+  .story-art.tilt:hover{box-shadow:var(--shadow-lift);}
   .story-art svg{width:58%;}
+  .story-logo{width:72%; height:auto; display:block;}
   .story-copy h2{margin-bottom:16px;}
   .story-copy p{margin-bottom:14px; color:var(--plum-soft);}
   .story-points{list-style:none; margin-top:18px; display:grid; gap:10px;}
@@ -173,13 +215,23 @@
   @media(min-width:700px){.gallery-grid{grid-template-columns:repeat(3,1fr);}}
   .gal-item{
     aspect-ratio:1/1; border-radius:14px; overflow:hidden; position:relative;
+    box-shadow:var(--shadow-soft);
+    transform-style:preserve-3d; will-change:transform;
+    transition:transform 0.15s ease-out, box-shadow 0.3s ease;
   }
+  .gal-item.tilt:hover{box-shadow:var(--shadow-lift);}
   .gal-item img{width:100%; height:100%; object-fit:cover; display:block;}
 
   /* ---------- TESTIMONIALS ---------- */
   .testimonials{background:var(--blush);}
   .t-grid{display:grid; gap:22px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
-  .t-card{background:var(--cream); border-radius:16px; padding:26px 24px;}
+  .t-card{
+    background:var(--cream); border-radius:16px; padding:26px 24px;
+    box-shadow:var(--shadow-soft);
+    transform-style:preserve-3d; will-change:transform;
+    transition:transform 0.15s ease-out, box-shadow 0.3s ease;
+  }
+  .t-card.tilt:hover{box-shadow:var(--shadow-lift);}
   .t-card p{font-style:italic; margin-bottom:14px; font-size:0.96rem;}
   .t-name{font-weight:600; font-size:0.9rem; color:var(--magenta-deep);}
 
@@ -225,6 +277,32 @@
     width:56px; height:56px; border-radius:50%; background:var(--teal);
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 6px 18px rgba(21,152,149,0.4);
+    animation:wa-bob 3.4s ease-in-out infinite;
+  }
+  .wa-float::before{
+    content:""; position:absolute; inset:0; border-radius:50%;
+    background:var(--teal); opacity:0.55;
+    animation:wa-pulse 2.6s ease-out infinite;
+    z-index:-1;
+  }
+  @keyframes wa-bob{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-7px);}
+  }
+  @keyframes wa-pulse{
+    0%{transform:scale(1); opacity:0.5;}
+    100%{transform:scale(1.7); opacity:0;}
+  }
+
+  /* ---------- SCROLL REVEAL ---------- */
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity 0.7s ease, transform 0.7s ease;}
+  .reveal.is-visible{opacity:1; transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .float-shape, .hero-logo, .wa-float, .wa-float::before{animation:none !important;}
+    .reveal{opacity:1; transform:none; transition:none;}
+    .card, .snack-card, .gal-item, .t-card, .story-art{transition:none;}
   }
 </style>
 </head>
@@ -233,7 +311,7 @@
 <nav>
   <div class="wrap">
     <div class="brandmark">
-      <span>Oreo Delight</span>
+      <img src="assets/logo.png" alt="Oreo Delightful Creations logo" class="nav-logo">
     </div>
     <div class="navlinks">
       <a href="#home">Home</a><a href="#about">About</a><a href="#menu">Menu</a><a href="#events">Events</a><a href="#gallery">Gallery</a><a href="#order">Order</a><a href="#contact">Contact</a>
@@ -244,16 +322,9 @@
 
 <header class="hero" id="home">
   <div class="wrap">
-    <svg class="cake-mark" viewBox="0 0 100 90" fill="none">
-      <ellipse cx="50" cy="78" rx="34" ry="7" fill="var(--magenta)" opacity="0.15"/>
-      <path d="M20 62 Q50 74 80 62 L74 46 Q50 56 26 46 Z" fill="var(--magenta-deep)"/>
-      <path d="M26 46 Q50 56 74 46 L69 32 Q50 40 31 32 Z" fill="var(--magenta)"/>
-      <path d="M31 32 Q50 40 69 32 L65 20 Q50 26 35 20 Z" fill="#e05585"/>
-      <circle cx="50" cy="14" r="5" fill="var(--gold)"/>
-      <path d="M8 58 Q50 78 92 58" stroke="var(--teal)" stroke-width="4" fill="none" stroke-linecap="round"/>
-    </svg>
-    <h1>Oreo Delightful Creations<span class="script">Taste of Delights…</span></h1>
-    <p class="intro">Handcrafted cakes, pastries and celebration treats — plus full-service event styling and catering, made with care in Osogbo and delivered with a smile.</p>
+    <img src="assets/logo.png" alt="Oreo Delightful Creations logo" class="hero-logo">
+    <h1>Oreo Delightful Creations</h1>
+    <p class="intro">Handcrafted cakes, pastries and celebration treats — plus full-service event styling and catering, made with care and delivered with a smile.</p>
     <div class="hero-ctas">
       <a class="btn btn-primary" href="#order">Order Now</a>
       <a class="btn btn-outline" href="https://wa.me/2349039634961?text=Hi%2C%20I%27d%20like%20to%20book%20an%20event." target="_blank" rel="noopener">Book an Event</a>
@@ -267,20 +338,20 @@
 <div class="offer-strip">
   <div class="wrap">
     <div><strong>Custom Cakes</strong>Starting from ₦…</div>
-    <div><strong>Snack Trays</strong>Chinchin · Kulikuli · Plantain Chips</div>
+    <div><strong>Snack Trays</strong>Chinchin · Kulikuli · Plantain Chips · Peanut Burger</div>
     <div><strong>Full Event Styling</strong>Request a quote</div>
   </div>
 </div>
 
 <section class="menu" id="menu">
   <div class="wrap">
-    <div class="section-head">
-      <h2>From Our Kitchen</h2>
+    <div class="section-head reveal">
+      <h2>Our Menu</h2>
       <p>A taste of what we bake, pack and serve — see the full menu for sizes, flavours and customisation.</p>
     </div>
     <div class="card-grid">
 
-      <div class="card">
+      <div class="card tilt reveal">
         <div class="card-photo"><img src="assets/cake1.jpg" alt="Celebration cake by Oreo Delightful Creations"></div>
         <div class="card-body">
           <h3>Celebration Cakes</h3>
@@ -289,12 +360,21 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card tilt reveal">
         <div class="card-photo"><img src="assets/giftbox.jpg" alt="Gift box and hamper by Oreo Delightful Creations"></div>
         <div class="card-body">
           <h3>Gift Boxes & Hampers</h3>
           <p>Curated treats, beautifully packed for any occasion.</p>
           <div class="card-foot"><span class="price">From ₦…</span><a class="order-link" href="https://wa.me/2349039634961?text=Hi%2C%20I%27d%20like%20to%20order%20a%20gift%20box." target="_blank" rel="noopener">Order →</a></div>
+        </div>
+      </div>
+
+      <div class="card tilt reveal">
+        <div class="card-photo"><img src="assets/foodtray.jpg" alt="Celebration food tray by Oreo Delightful Creations"></div>
+        <div class="card-body">
+          <h3>Food Trays</h3>
+          <p>Complete celebration trays — rice, protein, sides, drinks and a cake, packed as one.</p>
+          <div class="card-foot"><span class="price">From ₦…</span><a class="order-link" href="https://wa.me/2349039634961?text=Hi%2C%20I%27d%20like%20to%20order%20a%20food%20tray." target="_blank" rel="noopener">Order →</a></div>
         </div>
       </div>
 
@@ -306,22 +386,22 @@
         <p>Our signature snack line — crunchy, tasty, and made for gifting or everyday snacking.</p>
       </div>
       <div class="snack-grid">
-        <div class="snack-card">
+        <div class="snack-card tilt reveal">
           <div class="snack-photo"><img src="assets/chinchin.jpg" alt="Oreo Delight Chin-Chin"></div>
           <h4>Chin-Chin</h4>
           <div class="card-foot"><span class="price">From ₦…</span><a class="order-link" href="https://wa.me/2349039634961?text=Hi%2C%20I%27d%20like%20to%20order%20Chin-Chin." target="_blank" rel="noopener">Order →</a></div>
         </div>
-        <div class="snack-card">
+        <div class="snack-card tilt reveal">
           <div class="snack-photo"><img src="assets/plantainchips.jpg" alt="Oreo Delight Crispy Plantain Chips"></div>
           <h4>Plantain Chips</h4>
           <div class="card-foot"><span class="price">From ₦…</span><a class="order-link" href="https://wa.me/2349039634961?text=Hi%2C%20I%27d%20like%20to%20order%20Plantain%20Chips." target="_blank" rel="noopener">Order →</a></div>
         </div>
-        <div class="snack-card">
+        <div class="snack-card tilt reveal">
           <div class="snack-photo"><img src="assets/kulikuli.jpg" alt="Oreo Delight Crunch Kuli-Kuli"></div>
           <h4>Kuli-Kuli</h4>
           <div class="card-foot"><span class="price">From ₦…</span><a class="order-link" href="https://wa.me/2349039634961?text=Hi%2C%20I%27d%20like%20to%20order%20Kuli-Kuli." target="_blank" rel="noopener">Order →</a></div>
         </div>
-        <div class="snack-card">
+        <div class="snack-card tilt reveal">
           <div class="snack-photo"><img src="assets/peanutburger.jpg" alt="Oreo Delight Crunchy Peanuts Burger"></div>
           <h4>Crunchy Peanut Burger</h4>
           <div class="card-foot"><span class="price">From ₦…</span><a class="order-link" href="https://wa.me/2349039634961?text=Hi%2C%20I%27d%20like%20to%20order%20Crunchy%20Peanut%20Burger." target="_blank" rel="noopener">Order →</a></div>
@@ -334,13 +414,8 @@
 
 <section class="story" id="about">
   <div class="wrap">
-    <div class="story-art">
-      <svg viewBox="0 0 100 100" fill="none">
-        <path d="M15 70 Q50 90 85 70" stroke="var(--teal)" stroke-width="3" fill="none"/>
-        <path d="M25 55 Q50 68 75 55 L70 40 Q50 50 30 40 Z" fill="var(--magenta-deep)"/>
-        <path d="M30 40 Q50 50 70 40 L66 27 Q50 34 34 27 Z" fill="var(--magenta)"/>
-        <circle cx="50" cy="20" r="5" fill="var(--gold)"/>
-      </svg>
+    <div class="story-art tilt reveal">
+      <img src="assets/logo.png" alt="Oreo Delightful Creations logo" class="story-logo">
     </div>
     <div class="story-copy">
       <h2>Our Story</h2>
@@ -357,17 +432,17 @@
 
 <section class="services" id="events">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <h2>Events & Services</h2>
       <p>From the cake table to the last guest, we handle it — book us for one service or the full experience.</p>
     </div>
     <div class="service-grid">
-      <div class="service-item"><h3>Baking & Catering</h3><p>Cakes, small chops and full menus for any size gathering.</p></div>
-      <div class="service-item"><h3>Event Decoration</h3><p>Indoor & outdoor styling built around your theme.</p></div>
-      <div class="service-item"><h3>Mixology</h3><p>Drinks, cocktails and mocktails for your guests.</p></div>
-      <div class="service-item"><h3>Event Coordination</h3><p>Weddings, birthdays, graduations & corporate events.</p></div>
-      <div class="service-item"><h3>Gift Packing</h3><p>Surprise packages and hampers, packed with care.</p></div>
-      <div class="service-item"><h3>Corporate Events</h3><p>Catering and styling for meetings, launches & parties.</p></div>
+      <div class="service-item reveal"><h3>Baking & Catering</h3><p>Cakes, small chops and full menus for any size gathering.</p></div>
+      <div class="service-item reveal"><h3>Event Decoration</h3><p>Indoor & outdoor styling built around your theme.</p></div>
+      <div class="service-item reveal"><h3>Mixology</h3><p>Drinks, cocktails and mocktails for your guests.</p></div>
+      <div class="service-item reveal"><h3>Event Coordination</h3><p>Weddings, birthdays, graduations & corporate events.</p></div>
+      <div class="service-item reveal"><h3>Gift Packing</h3><p>Surprise packages and hampers, packed with care.</p></div>
+      <div class="service-item reveal"><h3>Corporate Events</h3><p>Catering and styling for meetings, launches & parties.</p></div>
     </div>
     <div class="services-cta">
       <a class="btn btn-primary" href="https://wa.me/2349039634961?text=Hi%2C%20I%27d%20like%20to%20request%20a%20quote%20for%20an%20event." target="_blank" rel="noopener">Request a Quote</a>
@@ -377,7 +452,7 @@
 
 <section class="gallery" id="gallery">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <h2>A Look at Our Work</h2>
       <p>Real cakes, real events, real celebrations — organised by category.</p>
     </div>
@@ -385,73 +460,73 @@
     <div class="gal-category">
       <h3>Cakes</h3>
       <div class="gallery-grid">
-        <div class="gal-item"><img src="assets/cake2.jpg" alt="Cake"></div>
-        <div class="gal-item"><img src="assets/cake3.jpg" alt="Bride to be cake"></div>
-        <div class="gal-item"><img src="assets/cake4.jpg" alt="Birthday cake"></div>
-        <div class="gal-item"><img src="assets/cake5.jpg" alt="Launch celebration cake"></div>
-        <div class="gal-item"><img src="assets/cake6.jpg" alt="Two-tier floral birthday cake"></div>
-        <div class="gal-item"><img src="assets/cake7.jpg" alt="Drip birthday cake"></div>
-        <div class="gal-item"><img src="assets/cake8.jpg" alt="Blue and white cake"></div>
-        <div class="gal-item"><img src="assets/cake9.jpg" alt="Graduation cake"></div>
-        <div class="gal-item"><img src="assets/cake10.jpg" alt="Mini birthday cake"></div>
+        <div class="gal-item tilt reveal"><img src="assets/cake2.jpg" alt="Cake"></div>
+        <div class="gal-item tilt reveal"><img src="assets/cake3.jpg" alt="Bride to be cake"></div>
+        <div class="gal-item tilt reveal"><img src="assets/cake4.jpg" alt="Birthday cake"></div>
+        <div class="gal-item tilt reveal"><img src="assets/cake5.jpg" alt="Launch celebration cake"></div>
+        <div class="gal-item tilt reveal"><img src="assets/cake6.jpg" alt="Two-tier floral birthday cake"></div>
+        <div class="gal-item tilt reveal"><img src="assets/cake7.jpg" alt="Drip cake with cupcake topper"></div>
+        <div class="gal-item tilt reveal"><img src="assets/cake8.jpg" alt="Blue and white cake in gift box"></div>
+        <div class="gal-item tilt reveal"><img src="assets/cake9.jpg" alt="Graduation cake"></div>
+        <div class="gal-item tilt reveal"><img src="assets/cake10.jpg" alt="Mini Happy Birthday Baby cake"></div>
       </div>
     </div>
 
     <div class="gal-category">
       <h3>Pastries &amp; Snacks</h3>
       <div class="gallery-grid">
-        <div class="gal-item"><img src="assets/doughnuts.jpg" alt="Doughnuts"></div>
-        <div class="gal-item"><img src="assets/pancakes.jpg" alt="Pancakes"></div>
-        <div class="gal-item"><img src="assets/fruitcake.jpg" alt="Fruit cake loaf"></div>
-        <div class="gal-item"><img src="assets/chinchin2.jpg" alt="Chin-Chin packs"></div>
-        <div class="gal-item"><img src="assets/wrap.jpg" alt="Wrap"></div>
-        <div class="gal-item"><img src="assets/peanutburger.jpg" alt="Crunchy Peanut Burger"></div>
-        <div class="gal-item"><img src="assets/pastries1.jpg" alt="Baked pastries tray"></div>
-        <div class="gal-item"><img src="assets/pastries2.jpg" alt="Pastry with savoury filling"></div>
-        <div class="gal-item"><img src="assets/noodles.jpg" alt="Noodles with chicken"></div>
-        <div class="gal-item"><img src="assets/fruitcake2.jpg" alt="Banana bread"></div>
+        <div class="gal-item tilt reveal"><img src="assets/doughnuts.jpg" alt="Doughnuts"></div>
+        <div class="gal-item tilt reveal"><img src="assets/pancakes.jpg" alt="Pancakes"></div>
+        <div class="gal-item tilt reveal"><img src="assets/fruitcake.jpg" alt="Fruit cake loaf"></div>
+        <div class="gal-item tilt reveal"><img src="assets/chinchin2.jpg" alt="Chin-Chin packs"></div>
+        <div class="gal-item tilt reveal"><img src="assets/wrap.jpg" alt="Wrap"></div>
+        <div class="gal-item tilt reveal"><img src="assets/peanutburger.jpg" alt="Crunchy Peanut Burger"></div>
+        <div class="gal-item tilt reveal"><img src="assets/pastries1.jpg" alt="Baked pastries tray"></div>
+        <div class="gal-item tilt reveal"><img src="assets/pastries2.jpg" alt="Pastry with savoury filling"></div>
+        <div class="gal-item tilt reveal"><img src="assets/noodles.jpg" alt="Noodles with chicken"></div>
+        <div class="gal-item tilt reveal"><img src="assets/fruitcake2.jpg" alt="Banana bread"></div>
       </div>
     </div>
 
     <div class="gal-category">
       <h3>Gift Boxes</h3>
       <div class="gallery-grid">
-        <div class="gal-item"><img src="assets/giftbox.jpg" alt="Gift box"></div>
-        <div class="gal-item"><img src="assets/gifthamper1.jpg" alt="Gift hamper"></div>
-        <div class="gal-item"><img src="assets/giftbaskets.jpg" alt="Wrapped gift baskets"></div>
-        <div class="gal-item"><img src="assets/grocery_hamper.jpg" alt="Grocery hamper"></div>
-        <div class="gal-item"><img src="assets/gifthamper2.jpg" alt="Teddy bear gift set"></div>
-        <div class="gal-item"><img src="assets/hamper2.jpg" alt="Fruit and drinks hamper"></div>
-        <div class="gal-item"><img src="assets/giftbox2.jpg" alt="Gift box with treats"></div>
-        <div class="gal-item"><img src="assets/giftset1.jpg" alt="Gift set with cupcakes and balloon"></div>
+        <div class="gal-item tilt reveal"><img src="assets/giftbox.jpg" alt="Gift box"></div>
+        <div class="gal-item tilt reveal"><img src="assets/gifthamper1.jpg" alt="Gift hamper"></div>
+        <div class="gal-item tilt reveal"><img src="assets/giftbaskets.jpg" alt="Wrapped gift baskets"></div>
+        <div class="gal-item tilt reveal"><img src="assets/grocery_hamper.jpg" alt="Grocery hamper"></div>
+        <div class="gal-item tilt reveal"><img src="assets/gifthamper2.jpg" alt="Teddy bear and snack gift box"></div>
+        <div class="gal-item tilt reveal"><img src="assets/hamper2.jpg" alt="Fruit, rice and drinks hamper"></div>
+        <div class="gal-item tilt reveal"><img src="assets/giftbox2.jpg" alt="Happy Girlfriend Day gift box"></div>
+        <div class="gal-item tilt reveal"><img src="assets/giftset1.jpg" alt="Teddy bear, balloon and birthday cupcakes"></div>
       </div>
     </div>
 
     <div class="gal-category">
       <h3>Catering</h3>
       <div class="gallery-grid">
-        <div class="gal-item"><img src="assets/smallchops.jpg" alt="Small chops platter"></div>
-        <div class="gal-item"><img src="assets/smallchops2.jpg" alt="Small chops box"></div>
-        <div class="gal-item"><img src="assets/smallchops3.jpg" alt="Catering box with chicken"></div>
-        <div class="gal-item"><img src="assets/catering2.jpg" alt="Catering bowls"></div>
-        <div class="gal-item"><img src="assets/catering3.jpg" alt="Jollof rice with chicken and plantain"></div>
-        <div class="gal-item"><img src="assets/smallchops4.jpg" alt="Small chops platter"></div>
+        <div class="gal-item tilt reveal"><img src="assets/smallchops.jpg" alt="Small chops platter"></div>
+        <div class="gal-item tilt reveal"><img src="assets/smallchops2.jpg" alt="Small chops box"></div>
+        <div class="gal-item tilt reveal"><img src="assets/smallchops3.jpg" alt="Catering box with chicken"></div>
+        <div class="gal-item tilt reveal"><img src="assets/catering2.jpg" alt="Catering bowls"></div>
+        <div class="gal-item tilt reveal"><img src="assets/catering3.jpg" alt="Jollof rice with chicken and plantain"></div>
+        <div class="gal-item tilt reveal"><img src="assets/smallchops4.jpg" alt="Small chops platter"></div>
       </div>
     </div>
 
     <div class="gal-category">
       <h3>Decorations</h3>
       <div class="gallery-grid">
-        <div class="gal-item"><img src="assets/decor.jpg" alt="Event decoration"></div>
-        <div class="gal-item"><img src="assets/decor2.jpg" alt="Balloon arch decoration"></div>
-        <div class="gal-item"><img src="assets/decor3.jpg" alt="Balloon and floral decoration"></div>
+        <div class="gal-item tilt reveal"><img src="assets/decor.jpg" alt="Event decoration"></div>
+        <div class="gal-item tilt reveal"><img src="assets/decor2.jpg" alt="Balloon arch decoration"></div>
+        <div class="gal-item tilt reveal"><img src="assets/decor3.jpg" alt="Welcome back balloon and floral decoration"></div>
       </div>
     </div>
 
     <div class="gal-category">
       <h3>Events</h3>
       <div class="gallery-grid">
-        <div class="gal-item"><img src="assets/eventtable.jpg" alt="Event table setup"></div>
+        <div class="gal-item tilt reveal"><img src="assets/eventtable.jpg" alt="Event table setup"></div>
       </div>
     </div>
 
@@ -460,19 +535,19 @@
 
 <section class="testimonials">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <h2>What Our Customers Say</h2>
     </div>
     <div class="t-grid">
-      <div class="t-card">
+      <div class="t-card tilt reveal">
         <p>"The cake was even more beautiful in person, and it tasted just as good. Our guests couldn't stop asking who made it."</p>
         <div class="t-name">— Bukola A.</div>
       </div>
-      <div class="t-card">
+      <div class="t-card tilt reveal">
         <p>"They handled our entire graduation party — decor, snacks, everything. So easy to work with."</p>
         <div class="t-name">— Tunde O.</div>
       </div>
-      <div class="t-card">
+      <div class="t-card tilt reveal">
         <p>"My go-to for gift hampers now. Beautifully packed every single time."</p>
         <div class="t-name">— Feyisayo K.</div>
       </div>
@@ -482,7 +557,7 @@
 
 <section class="order-section" id="order">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <h2>Place an Order or Enquiry</h2>
       <p>Fill this in and it opens WhatsApp with your details ready to send — no need to type it all out again.</p>
     </div>
@@ -585,6 +660,47 @@
     const msg = encodeURIComponent(lines.join("\n"));
     window.open("https://wa.me/2349039634961?text=" + msg, "_blank");
   });
+
+  /* ---------- 3D tilt on cards ---------- */
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReduced) {
+    document.querySelectorAll('.tilt').forEach(function(el){
+      el.style.perspective = '700px';
+      el.addEventListener('mousemove', function(e){
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = 'rotateX(' + (y * -8) + 'deg) rotateY(' + (x * 8) + 'deg) translateY(-4px)';
+      });
+      el.addEventListener('mouseleave', function(){
+        el.style.transform = '';
+      });
+    });
+  }
+
+  /* ---------- scroll reveal ---------- */
+  if (!prefersReduced && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  /* ---------- nav elevation on scroll ---------- */
+  const navEl = document.querySelector('nav');
+  function onScroll(){
+    if (window.scrollY > 12) { navEl.classList.add('scrolled'); }
+    else { navEl.classList.remove('scrolled'); }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 </script>
 </body>
 </html>
